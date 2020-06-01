@@ -136,15 +136,10 @@
       "description": "Set the default city for the userbot's weather module.",
       "required": false
     },
-    "TELEGRAPH_SHORT_NAME": {
-      "description": "For telegraph module",
-      "value": "0",
-      "required": true
-    },
     "QUOTES_API_TOKEN": {
       "description": "API for quotes module get it from http://antiddos.systems",
       "value": "",
-      "required": true
+      "required": false
     },
     "TERM_ALIAS": {
       "description": "Leave if u don't know",
@@ -177,6 +172,11 @@
     },
     "LYDIA_API_KEY": {
       "description": "This Module Needs CoffeeHouse API to work. so Join https://telegram.dog/IntellivoidDev and send #activateapi and follow instructions.",
+      "required": false
+    },
+    "WATCH_COUNTRY": {
+      "description": "Country code for justwatch.com",
+      "value": "ID",
       "required": false
     }
   },

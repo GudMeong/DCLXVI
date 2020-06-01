@@ -1,7 +1,8 @@
 from userbot.events import register
 from userbot import CMD_HELP, bot, LOGS, CLEAN_WELCOME, BOTLOG_CHATID
 from telethon.events import ChatAction
-
+from datetime import datetime
+from pytz import timezone
 
 @bot.on(ChatAction)
 async def welcome_to_chat(event):
@@ -27,6 +28,28 @@ async def welcome_to_chat(event):
             a_user = await event.get_user()
             chat = await event.get_chat()
             me = await event.client.get_me()
+
+            # Current time in UTC
+            now_utc = datetime.now(timezone('UTC'))
+
+            # Convert to Jakarta time zone
+            jakarta_timezone = now_utc.astimezone(timezone('Asia/Jakarta'))
+            if jakarta_timezone.hour < 4:
+                time = "Good dawn 🌚"
+            elif 4 <= jakarta_timezone.hour < 6:
+                time = "Happy early morning 😁"
+            elif 6 <= jakarta_timezone.hour < 11:
+                time = "Good morning 🌤"
+            elif 11 <= jakarta_timezone.hour < 13:
+                time = "Happy early afternoon ☀"
+            elif 13 <= jakarta_timezone.hour <15:
+                time = "Good day 😎"
+            elif 15 <= jakarta_timezone.hour < 17:
+                time = "Good afternoon ⛅"
+            elif 17 <= jakarta_timezone.hour < 19:
+                time = "Good dusk 🌥"
+            else:
+                time = "Good night 🌙"
 
             title = chat.title if chat.title else "this chat"
             participants = await event.client.get_participants(chat)
@@ -60,6 +83,7 @@ async def welcome_to_chat(event):
                 current_saved_welcome_message = cws.reply
             current_message = await event.reply(
                 current_saved_welcome_message.format(mention=mention,
+                                                     time=time,
                                                      title=title,
                                                      count=count,
                                                      first=first,
@@ -76,7 +100,7 @@ async def welcome_to_chat(event):
             update_previous_welcome(event.chat_id, current_message.id)
 
 
-@register(outgoing=True, pattern=r"^.setwelcome(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.setwelcome(?: |$)(.*)")
 async def save_welcome(event):
     try:
         from userbot.modules.sql_helper.welcome_sql import add_welcome_setting
@@ -112,7 +136,7 @@ async def save_welcome(event):
         await event.edit(success.format('updated'))
 
 
-@register(outgoing=True, pattern="^.checkwelcome$")
+@register(outgoing=True, pattern="^\.checkwelcome$")
 async def show_welcome(event):
     try:
         from userbot.modules.sql_helper.welcome_sql import get_current_welcome_settings
@@ -133,7 +157,7 @@ async def show_welcome(event):
         await event.reply(cws.reply)
 
 
-@register(outgoing=True, pattern="^.rmwelcome$")
+@register(outgoing=True, pattern="^\.rmwelcome$")
 async def del_welcome(event):
     try:
         from userbot.modules.sql_helper.welcome_sql import rm_welcome_setting
@@ -150,7 +174,7 @@ CMD_HELP.update({
     ">`.setwelcome <welcome message> or reply to a message with .setwelcome`"
     "\nUsage: Saves the message as a welcome note in the chat."
     "\n\nAvailable variables for formatting welcome messages :"
-    "\n`{mention}, {title}, {count}, {first}, {last}, {fullname}, "
+    "\n`{mention}, {time}, {title}, {count}, {first}, {last}, {fullname}, "
     "{userid}, {username}, {my_first}, {my_fullname}, {my_last}, "
     "{my_mention}, {my_username}`"
     "\n\n>`.checkwelcome`"

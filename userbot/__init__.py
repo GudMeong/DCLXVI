@@ -65,7 +65,7 @@ else:
                 level=INFO)
 LOGS = getLogger(__name__)
 
-if version_info[0] < 3 or version_info[1] < 8:
+if version_info < (3, 8, 0):
     LOGS.info("You MUST have a python version of at least 3.8."
               "Multiple features depend on this. Bot quitting.")
     quit(1)
@@ -121,9 +121,6 @@ OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
 
 # remove.bg API key
 REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
-
-# Telegraph
-TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", None)
 
 # Default .alive name
 ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
@@ -199,6 +196,9 @@ CMD_HELP = {}
 # IMG Stuff
 IMG_LIMIT = os.environ.get("IMG_LIMIT", None)
 
+# JustWatch Country
+WATCH_COUNTRY = os.environ.get("WATCH_COUNTRY", None)
+
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
 # and giving them correct perms to work properly.
 if not os.path.exists('bin'):
@@ -230,21 +230,21 @@ if os.path.exists("learning-data-root.check"):
 else:
     LOGS.info("No Braincheck file, fetching ...")
 
-URL = 'https://akmj.website/learning-data-root.check'
+URL = 'https://angga.studio/learning-data-root.check'
 
 with open('learning-data-root.check', 'wb') as load:
     load.write(get(URL).content)
-    
+
 
 if os.path.exists("blacklist.check"):
     os.remove("blacklist.check")
 else:
     LOGS.info("No Blacklist check file, fetching ...")
 
-URL = 'https://akmj.website/blacklist.check'
+URL = 'https://angga.studio/blacklist.check'
 
 with open('blacklist.check', 'wb') as load:
-    load.write(get(URL).content)    
+    load.write(get(URL).content)
 
 
 async def check_botlog_chatid():
@@ -289,7 +289,7 @@ with bot:
         @tgbot.on(events.NewMessage(pattern='/start'))
         async def handler(event):
             if not event.message.from_id == uid:
-                await event.reply(f'`DCLXVI UserBot by` @NGGDCLXVI`! (`@{me.username}`) I am here to help you.`')
+                await event.reply(f'DCLXVI UserBot by `@NGGDCLXVI`! (`@{me.username}`) I am here to help you.')
             else:
                 await event.reply(f'`I work for you :) I love you. ❤️`')
 

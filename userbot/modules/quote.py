@@ -48,11 +48,15 @@ config = dict({"api_url": "http://api.antiddos.systems",
                                    "#62d4e3", "#65bdf3", "#ff5694"],
                "default_username_color": "#b48bf2"})
 
-@register(outgoing=True, pattern="^.qt(?: |$)(.*)")
+@register(outgoing=True, pattern="^\.qt(?: |$)(.*)")
 async def quotecmd(message):  # noqa: C901
     """Quote a message.
     Usage: .pch [template]
     If template is missing, possible templates are fetched."""
+    if not QUOTES_API_TOKEN:
+        return await message.edit(
+            "`Error: Quotes API key is missing! Add it to environment variables or config.env.`"
+        )
     await message.delete()
     args = message.raw_text.split(" ")[1:]
     if args == []:
@@ -207,7 +211,7 @@ async def get_markdown(reply):
     return markdown
 
 
-@register(outgoing=True, pattern="^.q(?: |$)(.*)")
+@register(outgoing=True, pattern="^\.q(?: |$)(.*)")
 async def _(event):
     if event.fwd_from:
         return
