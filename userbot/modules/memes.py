@@ -543,6 +543,29 @@ CRI = [
     "༼ ༎ຶ ෴ ༎ຶ༽",
 ]
 
+TYTYD = """
+🍆🍆
+🍆🍆🍆
+  🍆🍆🍆
+    🍆🍆🍆
+     🍆🍆🍆
+       🍆🍆🍆
+        🍆🍆🍆
+         🍆🍆🍆
+          🍆🍆🍆
+          🍆🍆🍆
+      🍆🍆🍆🍆
+ 🍆🍆🍆🍆🍆🍆
+ 🍆🍆🍆  🍆🍆🍆
+    🍆🍆       🍆🍆
+"""
+
+normiefont = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+              'v', 'w', 'x', 'y', 'z']
+
+weebyfont = ['卂', '乃', '匚', '刀', '乇', '下', '厶', '卄', '工', '丁', '长', '乚', '从', '𠘨', '口', '尸', '㔿', '尺', '丂', '丅', '凵',
+             'リ', '山', '乂', '丫', '乙']
+
 SLAP_TEMPLATES_EN = [
     "{hits} {victim} with a {item}.",
     "{hits} {victim} in the face with a {item}.",
@@ -835,41 +858,32 @@ async def slap(replied_user, event):
     else:
         slapped = f"[{first_name}](tg://user?id={user_id})"
     slap_str = event.pattern_match.group(1)
-    if slap_str == "en":
-       temp = choice(SLAP_TEMPLATES_EN)
-       item = choice(ITEMS_EN)
-       hit = choice(HIT_EN)
-       throw = choice(THROW_EN)
-       where = choice(WHERE_EN)
+    if slap_str == "en" or slap_str not in ["id", "jutsu"]:
+        temp = choice(SLAP_TEMPLATES_EN)
+        item = choice(ITEMS_EN)
+        hit = choice(HIT_EN)
+        throw = choice(THROW_EN)
+        where = choice(WHERE_EN)
     elif slap_str == "id":
-       temp = choice(SLAP_TEMPLATES_ID)
-       item = choice(ITEMS_ID)
-       hit = choice(HIT_ID)
-       throw = choice(THROW_ID)
-       where = choice(WHERE_ID)
-    elif slap_str == "jutsu":
-       temp = choice(SLAP_TEMPLATES_Jutsu)
-       item = choice(ITEMS_Jutsu)
-       hit = choice(HIT_Jutsu)
-       throw = choice(THROW_Jutsu)
-       where = choice(WHERE_Jutsu)
+        temp = choice(SLAP_TEMPLATES_ID)
+        item = choice(ITEMS_ID)
+        hit = choice(HIT_ID)
+        throw = choice(THROW_ID)
+        where = choice(WHERE_ID)
     else:
-       temp = choice(SLAP_TEMPLATES_EN)
-       item = choice(ITEMS_EN)
-       hit = choice(HIT_EN)
-       throw = choice(THROW_EN)
-       where = choice(WHERE_EN)
-
-    caption = "..." + temp.format(
+        temp = choice(SLAP_TEMPLATES_Jutsu)
+        item = choice(ITEMS_Jutsu)
+        hit = choice(HIT_Jutsu)
+        throw = choice(THROW_Jutsu)
+        where = choice(WHERE_Jutsu)
+    return "..." + temp.format(
         victim=slapped, item=item, hits=hit, throws=throw, where=where)
-
-    return caption
 
 @register(outgoing=True, pattern="^-_-$", ignore_unsafe=True)
 async def lol(lel):
     """ Ok... """
     okay = "-_-"
-    for i in range(10):
+    for _ in range(10):
         okay = okay[:-1] + "_-"
         await lel.edit(okay)
 
@@ -881,7 +895,7 @@ async def decide(event):
     if decision != "decide":
         r = requests.get(f"https://yesno.wtf/api?force={decision}").json()
     else:
-        r = requests.get(f"https://yesno.wtf/api").json()
+        r = requests.get("https://yesno.wtf/api").json()
     await event.delete()
     await event.client.send_message(event.chat_id,
                                     str(r["answer"]).upper(),
@@ -892,7 +906,7 @@ async def decide(event):
 @register(outgoing=True, pattern="^;_;$", ignore_unsafe=True)
 async def fun(e):
     t = ";_;"
-    for j in range(10):
+    for _ in range(10):
         t = t[:-1] + "_;"
         await e.edit(t)
 
@@ -935,10 +949,7 @@ async def copypasta(cp_e):
         elif owo.lower() == b_char:
             reply_text += "🅱️"
         else:
-            if bool(getrandbits(1)):
-                reply_text += owo.upper()
-            else:
-                reply_text += owo.lower()
+            reply_text += owo.upper() if bool(getrandbits(1)) else owo.lower()
     reply_text += choice(EMOJIS)
     await cp_e.edit(reply_text)
 
@@ -946,7 +957,7 @@ async def copypasta(cp_e):
 @register(outgoing=True, pattern="^\.vapor(?: |$)(.*)")
 async def vapor(vpr):
     """ Vaporize everything! """
-    reply_text = list()
+    reply_text = []
     textx = await vpr.get_reply_message()
     message = vpr.pattern_match.group(1)
     if message:
@@ -991,7 +1002,7 @@ async def stretch(stret):
 @register(outgoing=True, pattern="^\.zal(?: |$)(.*)")
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
-    reply_text = list()
+    reply_text = []
     textx = await zgfy.get_reply_message()
     message = zgfy.pattern_match.group(1)
     if message:
@@ -1009,7 +1020,7 @@ async def zal(zgfy):
             reply_text.append(charac)
             continue
 
-        for _ in range(0, 3):
+        for _ in range(3):
             textz = randint(0, 2)
 
             if textz == 0:
@@ -1132,7 +1143,7 @@ async def pressf(f):
 @register(outgoing=True, pattern="^Oof$")
 async def Oof(e):
     t = "Oof"
-    for j in range(15):
+    for _ in range(15):
         t = t[:-1] + "of"
         await e.edit(t)
 
@@ -1141,7 +1152,7 @@ async def Oof(e):
 async def moon(event):
     deq = deque(list("🌗🌘🌑🌒🌓🌔🌕🌖"))
     try:
-        for x in range(32):
+        for _ in range(32):
             await sleep(0.1)
             await event.edit("".join(deq))
             deq.rotate(1)
@@ -1153,7 +1164,7 @@ async def moon(event):
 async def earth(event):
     deq = deque(list("🌏🌍🌎🌎🌍🌏🌍🌎"))
     try:
-        for x in range(32):
+        for _ in range(32):
             await sleep(0.1)
             await event.edit("".join(deq))
             deq.rotate(1)
@@ -1165,7 +1176,7 @@ async def earth(event):
 async def clock(event):
     deq = deque(list("🕙🕘🕗🕖🕕🕔🕓🕒🕑🕐🕛"))
     try:
-        for x in range(32):
+        for _ in range(32):
             await sleep(0.1)
             await event.edit("".join(deq))
             deq.rotate(1)
@@ -1177,7 +1188,7 @@ async def clock(event):
 async def rain(event):
     deq = deque(list("☀️🌤⛅️🌥☁️🌧⛈"))
     try:
-        for x in range(32):
+        for _ in range(32):
             await sleep(0.1)
             await event.edit("".join(deq))
             deq.rotate(1)
@@ -1189,7 +1200,7 @@ async def rain(event):
 async def love(event):
     deq = deque(list("❤️🧡💛💚💙💜🖤💕💞💓💗💖💘💝"))
     try:
-        for x in range(32):
+        for _ in range(32):
             await sleep(0.1)
             await event.edit("".join(deq))
             deq.rotate(1)
@@ -1200,7 +1211,7 @@ async def love(event):
 @register(outgoing=True, pattern="^\.mock(?: |$)(.*)")
 async def spongemocktext(mock):
     """ Do it and find the real fun. """
-    reply_text = list()
+    reply_text = []
     textx = await mock.get_reply_message()
     message = mock.pattern_match.group(1)
     if message:
@@ -1469,6 +1480,66 @@ async def tolol(e):
         await e.edit("`\n░▀█▀░▄▀▄░█▒░░▄▀▄░█▒░`"
                      "`\n░▒█▒░▀▄▀▒█▄▄░▀▄▀▒█▄▄`")
 
+@register(outgoing=True, pattern=r"^\.caps(?: |$)([\s\S]*)")
+async def upper(e):
+    if e.text[0].isalpha() or e.text[0] not in ".":
+        return
+
+    textx = await e.get_reply_message()
+    message = e.pattern_match.group(1)
+    if message:
+        pass
+    elif textx:
+        message = textx.text
+    else:
+        await e.edit("`Usage: .caps <text>`")
+        return
+    reply = ''
+    reply += message.upper()
+    await e.edit(reply)
+
+
+@register(outgoing=True, pattern=r"^\.small(?: |$)([\s\S]*)")
+async def lower(e):
+    if e.text[0].isalpha() or e.text[0] not in ".":
+        return
+
+    textx = await e.get_reply_message()
+    message = e.pattern_match.group(1)
+    if message:
+        pass
+    elif textx:
+        message = textx.text
+    else:
+        await e.edit("`Usage: .small <text>`")
+        return
+    reply = ''
+    reply += message.lower()
+    await e.edit(reply)
+
+@register(outgoing=True, pattern=r"^\.(?:penis|dick)\s?(.)?")
+async def emoji_penis(e):
+    emoji = e.pattern_match.group(1)
+    titid = TYTYD
+    if emoji:
+        titid = titid.replace('🍆', emoji)
+    await e.edit(titid)
+
+@register(outgoing=True, pattern="^\.weeb(?: |$)(.*)")
+async def weebify(e):
+    args = e.pattern_match.group(1)
+    if not args:
+        get = await e.get_reply_message()
+        args = get.text
+    if not args:
+        await e.edit("`What I am Supposed to Weebify U Dumb`")
+        return
+    string = '  '.join(args).lower()
+    for normiecharacter in string:
+        if normiecharacter in normiefont:
+            weebycharacter = weebyfont[normiefont.index(normiecharacter)]
+            string = string.replace(normiecharacter, weebycharacter)
+    await e.edit(string)
 
 CMD_HELP.update({
     "memes":
@@ -1502,7 +1573,7 @@ CMD_HELP.update({
 \nUsage: UwU\
 \n\n>`.react`\
 \nUsage: Make your userbot react to everything.\
-\n\n>`.slap`\
+\n\n>`.slap` or `.slap jutsu` or `.slap id`\
 \nUsage: reply to slap them with random objects !!\
 \n\n>`.cry`\
 \nUsage: y u du dis, i cri.\
@@ -1531,9 +1602,11 @@ CMD_HELP.update({
 \n\n>`.scam` <action> <time>\
 \n[Available Actions: (`typing`, `contact`, `game`, `location`, `voice`, `round`, `video`, `photo`, `document`, `cancel`)]\
 \nUsage: Create fake chat actions, for fun. (Default action: typing)\
+\n\n>`.penis` <emoji> or `.dick` <emoji>.\
+\nUsage: Create a penis using the provided emoji, or 🍆 if not provided emoji.\
 \n\nAnd many more\
-\n| `.nou` | `.bot` | `.gay` | `.gey` | `.tf` | `.paw` | `.taco` | `.nih` |\
+\n| `.nou` | `.bot` | `.gay` | `.gey` | `.caps` | `.small` | `.taco` | `.nih` |\
 \n| `.fag` | `.gtfo` | `.stfu` | `.lol` | `.lool` | `.fail` | `.love` |\
-\n| `.rain` | `.earth` | `.ii` | `.tolol` |\
-\n\n\nThanks to 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for some of these."
+\n| `.rain` | `.earth` | `.ii` | `.tolol` | `.weeb` |\
+\n\n\nThanks to 🅱️ottom🅱️ext🅱️ot (`@NotAMemeBot`) for some of these."
 })

@@ -242,11 +242,10 @@ async def kang(args):
 async def resize_photo(photo):
     """ Resize the given photo to 512x512 """
     image = Image.open(photo)
-    maxsize = (512, 512)
     if (image.width and image.height) < 512:
         size1 = image.width
         size2 = image.height
-        if image.width > image.height:
+        if size1 > size2:
             scale = 512 / size1
             size1new = 512
             size2new = size2 * scale
@@ -259,6 +258,7 @@ async def resize_photo(photo):
         sizenew = (size1new, size2new)
         image = image.resize(sizenew)
     else:
+        maxsize = (512, 512)
         image.thumbnail(maxsize)
 
     return image
@@ -305,7 +305,7 @@ async def get_pack_info(event):
     await event.edit(OUTPUT)
 
 
-@register(outgoing=True, pattern="^\.getsticker$")
+@register(outgoing=True, pattern="^\.get$")
 async def sticker_to_png(sticker):
     if not sticker.is_reply:
         await sticker.edit("`NULL information to fetch...`")
@@ -345,6 +345,6 @@ CMD_HELP.update({
     "or choose the emoji you want to."
     "\n\n>`.stkrinfo`"
     "\nUsage: Gets info about the sticker pack."
-    "\n\n>`.getsticker`"
+    "\n\n>`.get`"
     "\nUsage: reply to a sticker to get 'PNG' file of sticker."
 })

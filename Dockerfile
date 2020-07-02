@@ -1,10 +1,10 @@
 # We're using ArchLinux
-FROM dasbastard/arch:latest
+FROM dasbastard/alpine:latest
 
 #
 # Clone repo and prepare working directory
 #
-RUN git clone -b master https://github.com/GudMeong/DCLXVI /home/dclxvi/
+RUN git clone -b master https://github.com/GengKapak/DCLXVI /home/dclxvi/
 RUN mkdir /home/dclxvi/bin/
 WORKDIR /home/dclxvi/
 

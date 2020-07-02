@@ -27,10 +27,7 @@ load_dotenv("config.env")
 def paginate_help(page_number, loaded_modules, prefix):
     number_of_rows = 5
     number_of_cols = 2
-    helpable_modules = []
-    for p in loaded_modules:
-        if not p.startswith("_"):
-            helpable_modules.append(p)
+    helpable_modules = [p for p in loaded_modules if not p.startswith("_")]
     helpable_modules = sorted(helpable_modules)
     modules = [custom.Button.inline(
         "{} {}".format("🔸", x),
@@ -105,7 +102,7 @@ HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
 # Custom (forked) repo URL for updater.
 UPSTREAM_REPO_URL = os.environ.get(
     "UPSTREAM_REPO_URL",
-    "https://github.com/GudMeong/DCLXVI.git")
+    "https://github.com/GengKapak/DCLXVI.git")
 # UPSTREAM_REPO_URL branch, the default is master
 UPSTREAM_REPO_BRANCH = os.environ.get(
     "UPSTREAM_REPO_BRANCH", "master")
@@ -125,9 +122,9 @@ REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
 # Default .alive name
 ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
 
-# Chrome sürücüsü ve Google Chrome dosyaları
+# Chrome stuff
 CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/usr/bin/chromedriver")
-GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", "/usr/bin/chromium")
+GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", "/usr/bin/chromium-browser")
 
 # OpenWeatherMap API Key
 OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
@@ -183,6 +180,10 @@ TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
 # Terminal Alias
 TERM_ALIAS = os.environ.get("TERM_ALIAS", None)
 
+# Zipfile module
+ZIP_DOWNLOAD_DIRECTORY = os.environ.get("ZIP_DOWNLOAD_DIRECTORY",
+                                        "./zips")
+
 # Genius Lyrics API
 GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN", None)
 
@@ -202,6 +203,14 @@ IMG_LIMIT = os.environ.get("IMG_LIMIT", None)
 
 # JustWatch Country
 WATCH_COUNTRY = os.environ.get("WATCH_COUNTRY", None)
+
+# Deezloader
+DEEZER_ARL_TOKEN = os.environ.get("DEEZER_ARL_TOKEN", None)
+
+# Image for alive
+IMG = os.environ.get(
+    "IMG",
+    "https://telegra.ph/file/2a7b0bd8547a80c019493.jpg")
 
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
 # and giving them correct perms to work properly.
@@ -252,20 +261,13 @@ with open('blacklist.check', 'wb') as load:
 
 
 async def check_botlog_chatid():
-    if not BOTLOG_CHATID and LOGSPAMMER:
+    if not BOTLOG_CHATID and LOGSPAMMER or not BOTLOG_CHATID and BOTLOG:
         LOGS.info(
             "You must set up the BOTLOG_CHATID variable in the config.env or environment variables, for the private error log storage to work."
             )
         quit(1)
 
-    elif not BOTLOG_CHATID and BOTLOG:
-        LOGS.info(
-            "You must set up the BOTLOG_CHATID variable in the config.env or environment variables, for the private error log storage to work."
-
-            )
-        quit(1)
-
-    elif not BOTLOG or not LOGSPAMMER:
+    elif not (BOTLOG and LOGSPAMMER):
         return
 
     entity = await bot.get_entity(BOTLOG_CHATID)
@@ -279,6 +281,7 @@ async def check_botlog_chatid():
 with bot:
     try:
         bot(JoinChannelRequest("@akmjfeels"))
+        bot(JoinChannelRequest("@GengKapak"))
 
         tgbot = TelegramClient(
             "TG_BOT_TOKEN",
@@ -292,43 +295,42 @@ with bot:
 
         @tgbot.on(events.NewMessage(pattern='/start'))
         async def handler(event):
-            if not event.message.from_id == uid:
+            if event.message.from_id != uid:
                 await event.reply(f'DCLXVI UserBot by `@NGGDCLXVI`! (`@{me.username}`) I am here to help you.')
             else:
-                await event.reply(f'`I work for you :) I love you. ❤️`')
+                await event.reply('`I work for you :) I love you. ❤️`')
 
         @tgbot.on(events.InlineQuery)  # pylint:disable=E0602
         async def inline_handler(event):
             builder = event.builder
             result = None
             query = event.text
-            if event.query.user_id == uid and query.startswith("@akmjfeels"):
-                rev_text = query[::-1]
+            if event.query.user_id == uid and query.startswith("@GengKapak"):
                 buttons = paginate_help(0, dugmeler, "helpme")
                 result = builder.article(
-                    f"Please Use Only With .help Command",
+                    "Please Use Only With .help Command",
                     text="{}\nTotal loaded modules: {}".format(
-                        "DCLXVI UserBot by @akmjfeels\n\nGitHub Repository [Here](https://github.com/AnggaR96s/DCLXVI)\n", len(dugmeler)),
+                        "DCLXVI UserBot by @GengKapak\n\nGitHub Repository [Here](https://github.com/GengKapak/DCLXVI)\n", len(dugmeler)),
                     buttons=buttons,
                     link_preview=False
                 )
             elif query.startswith("tb_btn"):
                 result = builder.article(
-                    "© @akmjfeels",
-                    text=f"@akmjfeels",
+                    "© @GengKapak",
+                    text="@GengKapak",
                     buttons=[],
                     link_preview=True
                 )
             else:
                 result = builder.article(
-                    "© @akmjfeels",
-                    text="""@akmjfeels is for you!
+                    "© @GengKapak",
+                    text="""@GengKapak is for you!
 You can convert your account to bot and use them. Remember, you can't manage someone else's bot! All installation details are explained from GitHub address below.""",
                     buttons=[
-                        [custom.Button.url("Follow Channel", "https://t.me/akmjfeels"), custom.Button.url(
+                        [custom.Button.url("Follow Channel", "https://t.me/GengKapak"), custom.Button.url(
                             "Build by", "https://t.me/NGGDCLXVI")],
                         [custom.Button.url(
-                            "GitHub", "https://github.com/AnggaR96s/DCLXVI")]
+                            "GitHub", "https://github.com/GengKapak/DCLXVI")]
                     ],
                     link_preview=False
                 )
@@ -377,17 +379,17 @@ You can convert your account to bot and use them. Remember, you can't manage som
                 cmdhel = str(CMD_HELP[modul_name])
                 if len(cmdhel) > 150:
                     help_string = str(CMD_HELP[modul_name])[
-                        :150] + "\n\nRead more... " + modul_name + " "
+                        :150] + "\n\nRead more .help " + modul_name + " "
                 else:
                     help_string = str(CMD_HELP[modul_name])
 
                 reply_pop_up_alert = help_string if help_string is not None else \
                     "{} No document has been written for module.".format(
                         modul_name)
-                await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
             else:
                 reply_pop_up_alert = "Please make for yourself, don't use my bot!"
-                await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+
+            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
     except:
         LOGS.info(
             "Support for inline is disabled on your bot. "

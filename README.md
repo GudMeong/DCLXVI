@@ -24,6 +24,11 @@ Alpha is modular Telegram userbot running on Python 3.8+ with an sqlalchemy data
 Based on [Paperplane](https://github.com/RaphielGang/Telegram-UserBot) and [ProjectBish](https://github.com/adekmaulana/ProjectBish) userbot.
 It has since evolved, becoming extremely modular and simple to use.
 
+## Generate String Session
+
+Run on Repl.it:
+<p align="center"><a href="http://dclxvi.anggar96s.repl.run"> <img src="https://telegra.ph/file/545ee571b1878b0411eff.jpg" alt="Generate String Session" /></a></p>
+
 ## How do I use it?
 
 Deploy to Heroku:
@@ -37,4 +42,4 @@ Deploy to Heroku:
 
 ## Credits
 
-Huge thanks to [everyone](https://github.com/AnggaR96s/DCLXVI/graphs/contributors) who have helped make this userbot awesome!!</p>
+Huge thanks to [everyone](https://github.com/GengKapak/DCLXVI/graphs/contributors) who have helped make this userbot awesome!!</p>

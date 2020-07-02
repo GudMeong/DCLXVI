@@ -7,6 +7,8 @@
 import heroku3
 import aiohttp
 import math
+import asyncio
+import os
 
 from userbot import (
     CMD_HELP,
@@ -61,8 +63,8 @@ async def variable(var):
                 return True
         else:
             configvars = heroku_var.to_dict()
-            msg = ''
             if BOTLOG:
+                msg = ''
                 for item in configvars:
                     msg += f"`{item}` = `{configvars[item]}`\n"
                 await var.client.send_message(
@@ -130,19 +132,19 @@ async def dyno_usage(dyno):
         Get your account Dyno Usage
     """
     await dyno.edit("`Getting Information...`")
-    useragent = (
-        'Mozilla/5.0 (Linux; Android 10; SM-G975F) '
-        'AppleWebKit/537.36 (KHTML, like Gecko) '
-        'Chrome/81.0.4044.117 Mobile Safari/537.36'
-    )
     user_id = Heroku.account().id
-    headers = {
-     'User-Agent': useragent,
-     'Authorization': f'Bearer {HEROKU_API_KEY}',
-     'Accept': 'application/vnd.heroku+json; version=3.account-quotas',
-    }
     path = "/accounts/" + user_id + "/actions/get-quota"
     async with aiohttp.ClientSession() as session:
+        useragent = (
+            'Mozilla/5.0 (Linux; Android 10; SM-G975F) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/81.0.4044.117 Mobile Safari/537.36'
+        )
+        headers = {
+         'User-Agent': useragent,
+         'Authorization': f'Bearer {HEROKU_API_KEY}',
+         'Accept': 'application/vnd.heroku+json; version=3.account-quotas',
+        }
         async with session.get(heroku_api + path, headers=headers) as r:
             if r.status != 200:
                 await dyno.client.send_message(
@@ -191,6 +193,28 @@ async def dyno_usage(dyno):
             return True
 
 
+@register(outgoing=True, pattern=r"^\.logs")
+async def _(dyno):
+        try:
+             Heroku = heroku3.from_key(HEROKU_API_KEY)
+             app = Heroku.app(HEROKU_APP_NAME)
+        except:
+  	       return await dyno.reply("`Please make sure your Heroku API Key, Your App name are configured correctly in the heroku var.`")
+        await dyno.edit("`Getting Logs....`")
+        with open('logs.txt', 'w') as log:
+            log.write(app.get_log())
+        await dyno.client.send_file(
+            dyno.chat_id,
+            "logs.txt",
+            reply_to=dyno.id,
+            caption="`Heroku dyno logs`"
+        )
+        await dyno.edit("`Sending dyno logs ..`")
+        await asyncio.sleep(5)
+        await dyno.delete()
+        return os.remove('logs.txt')
+
+
 CMD_HELP.update({
     "heroku":
     ">.`usage`"
@@ -204,4 +228,6 @@ CMD_HELP.update({
     "\n\n>`.del var <VAR>`"
     "\nUsage: delete existing variable"
     "\n!!! WARNING !!!, after deleting variable the bot will restarted"
+    "\n\n>`.logs`"
+    "\nUsage: Get heroku dyno logs"
 })

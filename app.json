@@ -8,7 +8,7 @@
     "modular",
     "productivity"
   ],
-  "repository": "https://github.com/AnggaR96s/DCLXVI",
+  "repository": "https://github.com/GengKapak/DCLXVI",
   "website": "https://telegra.ph/How-to-host-a-Telegram-Userbot-11-02",
   "stack": "container",
   "env": {
@@ -168,7 +168,8 @@
     },
     "BITLY_TOKEN": {
       "description": "Your Bit.ly API key, get it from 'https://bitly.com/a/sign_up'",
-      "value": ""
+      "value": "",
+      "required": false
     },
     "LOGSPAMMER": {
       "description": "Set this to True in case you want the error logs to be stored in the userbot log group, instead of spitting out the file in the current chat, requires a valid BOTLOG_CHATID to be set.",
@@ -181,6 +182,11 @@
     "WATCH_COUNTRY": {
       "description": "Country code for justwatch.com",
       "value": "ID",
+      "required": false
+    },
+    "DEEZER_ARL_TOKEN": {
+      "description": "Input your DEEZER ARL TOKEN",
+      "value": "",
       "required": false
     }
   },

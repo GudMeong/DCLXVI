@@ -39,8 +39,8 @@ from telethon.tl.types import DocumentAttributeAudio
 from userbot.utils import progress, chrome, googleimagesdownload
 
 CARBONLANG = "auto"
-TTS_LANG = "en"
-TRT_LANG = "en"
+TTS_LANG = "id"
+TRT_LANG = "id"
 
 
 @register(outgoing=True, pattern="^\.crblang (.*)")
@@ -93,7 +93,7 @@ async def carbon_api(e):
     await e.delete()  # Deleting msg
 
 
-@register(outgoing=True, disable_errors=True,  pattern="^\.img (.*)")
+@register(outgoing=True, pattern="^\.img (.*)")
 async def img_sampler(event):
     """ For .img command, search and return images matching the query. """
     await event.edit("`Processing...`")
@@ -126,7 +126,7 @@ async def img_sampler(event):
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
 
 
-@register(outgoing=True, pattern="^\.currency (.*)")
+@register(outgoing=True, pattern="^\.crc (.*)")
 async def moni(event):
     input_str = event.pattern_match.group(1)
     input_sgra = input_str.split(" ")
@@ -321,12 +321,11 @@ async def imdb(e):
         else:
             mov_details = ''
         credits = soup.findAll('div', 'credit_summary_item')
+        director = credits[0].a.text
         if len(credits) == 1:
-            director = credits[0].a.text
             writer = 'Not available'
             stars = 'Not available'
         elif len(credits) > 2:
-            director = credits[0].a.text
             writer = credits[1].a.text
             actors = []
             for x in credits[2].findAll('a'):
@@ -334,7 +333,6 @@ async def imdb(e):
             actors.pop()
             stars = actors[0] + ',' + actors[1] + ',' + actors[2]
         else:
-            director = credits[0].a.text
             writer = 'Not available'
             actors = []
             for x in credits[1].findAll('a'):
@@ -598,8 +596,7 @@ async def download_video(v_url):
     c_time = time.time()
     if song:
         await v_url.edit(
-            f"`Preparing to upload song:`\n**{rip_data['title']}**"
-            "\nby *{rip_data['uploader']}*")
+            f"`Preparing to upload song:`\n**{rip_data['title']}**")
         await v_url.client.send_file(
             v_url.chat_id,
             f"{rip_data['id']}.mp3",
@@ -617,8 +614,7 @@ async def download_video(v_url):
         await v_url.delete()
     elif video:
         await v_url.edit(
-            f"`Preparing to upload video:`\n**{rip_data['title']}**"
-            "\nby *{rip_data['uploader']}*")
+            f"`Preparing to upload video:`\n**{rip_data['title']}**")
         await v_url.client.send_file(
             v_url.chat_id,
             f"{rip_data['id']}.mp4",
@@ -642,7 +638,7 @@ CMD_HELP.update({
     ">`.img <search_query>`"
     "\nUsage: Does an image search on Google and shows **IMG_LIMIT** images.",
     "currency":
-    ">`.currency <amount> <from> <to>`"
+    ">`.crc <amount> <from> <to>`"
     "\nUsage: Converts various currencies for you.",
     "carbon":
     ">`.carbon <text> [or reply]`"

@@ -17,13 +17,9 @@
 # @Qulec tarafından yazılmıştır.
 # Thanks @Spechide.
 
-import asyncio
-import json
 import logging
-import requests
-import userbot
 
-from userbot import CMD_HELP, BOT_USERNAME
+from userbot import BOT_USERNAME
 from userbot.events import register
 
 logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
@@ -35,7 +31,7 @@ async def yardim(event):
     if tgbotusername is not None:
         results = await event.client.inline_query(
             tgbotusername,
-            "@akmjfeels"
+            "@GengKapak"
         )
         await results[0].click(
             event.chat_id,

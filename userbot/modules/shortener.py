@@ -7,7 +7,7 @@
 
 from bitlyshortener import Shortener
 from re import match
-from userbot import bot, CMD_HELP, BITLY_TOKEN, BOTLOG, BOTLOG_CHATID
+from userbot import CMD_HELP, BITLY_TOKEN, BOTLOG, BOTLOG_CHATID
 from userbot.events import register
 
 
@@ -28,9 +28,7 @@ async def shortener(short):
             await short.edit("`Error! No URL given!`")
             return
         link_match = match(r'\bhttps?://.*\.\S+', message)
-        if link_match:
-            pass
-        else:
+        if not link_match:
             await short.edit("`Error! Please provide valid url!`\nexample: https://google.com")
             return
         urls = [f'{message}']
@@ -42,7 +40,7 @@ async def shortener(short):
         if BOTLOG: 
            await short.client.send_message(BOTLOG_CHATID, f"`#SHORTLINK \nThis Your Link!`\n {output}")
     else:
-        await short.edit(f"Set bit.ly API token first\nGet from [here](https://bitly.com/a/sign_up)")
+        await short.edit("Set bit.ly API token first\nGet from [here](https://bitly.com/a/sign_up)")
 
 CMD_HELP.update({
     "bitly":
