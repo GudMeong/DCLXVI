@@ -1,8 +1,8 @@
-
 from userbot import CMD_HELP, bot
 from userbot.events import register
 
-@register(outgoing=True, pattern="^\.all$")
+
+@register(outgoing=True, pattern=r"^\.all$")
 async def all(event):
     if event.fwd_from:
         return
@@ -14,8 +14,4 @@ async def all(event):
     await bot.send_message(chat, mentions, reply_to=event.message.reply_to_msg_id)
 
 
-CMD_HELP.update({
-    "all":
-    ">.all"
-    "\nUsage: A Plugin to tagall in the chat."
-})
+CMD_HELP.update({"all": ">.all" "\nUsage: A Plugin to tagall in the chat."})

@@ -5,17 +5,18 @@
 #
 """ Userbot module containing commands related to the \
     Information Superhighway (yes, Internet). """
-
 import os
-import wget
 from datetime import datetime
+
+import wget
 from speedtest import Speedtest
 from telethon import functions
+
 from userbot import CMD_HELP
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^\.speed$")
+@register(outgoing=True, pattern=r"^\.speed$")
 async def speedtst(spd):
     """ For .speed command, use SpeedTest to check server speeds. """
     await spd.edit("`Running speed test . . .`")
@@ -26,31 +27,23 @@ async def speedtst(spd):
     test.upload()
     test.results.share()
     result = test.results.dict()
-    path = wget.download(result['share'])
-    output =  f"""**
-                Started at `{result['timestamp']}`
-
-		Client:
-
-		ISP: `{result['client']['isp']}`
-		Country: `{result['client']['country']}`
-
-		Server:
-		Name: `{result['server']['name']}`
-		Country: `{result['server']['country']}, {result['server']['cc']}`
-		Sponsor: `{result['server']['sponsor']}`
-		Latency: `{result['server']['latency']}`
-
-		Ping: `{result['ping']}`
-		Sent: `{humanbytes(result['bytes_sent'])}`
-		Received: `{humanbytes(result['bytes_received'])}`
-		Download: `{humanbytes(result['download'] / 8)}/s`
-		Upload: `{humanbytes(result['upload'] / 8)}/s`**"""
+    path = wget.download(result["share"])
+    output = f"Started at `{result['timestamp']}`\n\n"
+    output += f"Client:\n\n"
+    output += f"ISP: `{result['client']['isp']}`\n"
+    output += f"Country: `{result['client']['country']}`\n\n"
+    output += f"Server:\n"
+    output += f"Name: `{result['server']['name']}`\n"
+    output += f"Country: `{result['server']['country']}, {result['server']['cc']}`\n"
+    output += f"Sponsor: `{result['server']['sponsor']}`\n"
+    output += f"Latency: `{result['server']['latency']}`\n\n"
+    output += f"Ping: `{result['ping']}`\n"
+    output += f"Sent: `{humanbytes(result['bytes_sent'])}`\n"
+    output += f"Received: `{humanbytes(result['bytes_received'])}`\n"
+    output += f"Download: `{humanbytes(result['download'] / 8)}/s`\n"
+    output += f"Upload: `{humanbytes(result['upload'] / 8)}/s`"
     await spd.delete()
-    await spd.client.send_file(spd.chat_id,
-                                   path,
-                                   caption=output,
-                                   force_document=False)
+    await spd.client.send_file(spd.chat_id, path, caption=output, force_document=False)
     os.remove(path)
 
 
@@ -60,23 +53,25 @@ def humanbytes(size: float) -> str:
         return ""
     power = 1024
     t_n = 0
-    power_dict = {0: ' ', 1: 'Ki', 2: 'Mi', 3: 'Gi', 4: 'Ti'}
+    power_dict = {0: " ", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
     while size > power:
         size /= power
         t_n += 1
     return "{:.2f} {}B".format(size, power_dict[t_n])
 
 
-@register(outgoing=True, pattern="^\.dc$")
+@register(outgoing=True, pattern=r"^\.dc$")
 async def neardc(event):
     """ For .dc command, get the nearest datacenter information. """
     result = await event.client(functions.help.GetNearestDcRequest())
-    await event.edit(f"Country : `{result.country}`\n"
-                     f"Nearest Datacenter : `{result.nearest_dc}`\n"
-                     f"This Datacenter : `{result.this_dc}`")
+    await event.edit(
+        f"Country : `{result.country}`\n"
+        f"Nearest Datacenter : `{result.nearest_dc}`\n"
+        f"This Datacenter : `{result.this_dc}`"
+    )
 
 
-@register(outgoing=True, pattern="^\.ping$")
+@register(outgoing=True, pattern=r"^\.ping$")
 async def pingme(pong):
     """ For .ping command, ping the userbot from any chat.  """
     start = datetime.now()
@@ -86,14 +81,10 @@ async def pingme(pong):
     await pong.edit("`Pong!\n%sms`" % (duration))
 
 
-CMD_HELP.update({
-     "speed":
-     ">`.speed`"
-     "\nUsage: Does a speedtest and shows the results.",
-     "dc":
-     ">`.dc`"
-     "\nUsage: Finds the nearest datacenter from your server.",
-     "ping":
-     ">`.ping`"
-     "\nUsage: Shows how long it takes to ping your bot."
-})
+CMD_HELP.update({"speed": ">`.speed`"
+                 "\nUsage: Does a speedtest and shows the results.",
+                 "dc": ">`.dc`"
+                 "\nUsage: Finds the nearest datacenter from your server.",
+                 "ping": ">`.ping`"
+                 "\nUsage: Shows how long it takes to ping your bot.",
+                 })

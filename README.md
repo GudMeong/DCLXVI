@@ -1,6 +1,18 @@
 # DCLXVI UserBot Project
 
-![logo](https://telegra.ph/file/3c52fa61187f141cd5ff2.png)
+<p align="center">
+    <a href="https://github.com/GengKapak/DCLXVI/actions?query=PEP8"> <img src="https://github.com/GengKapak/DCLXVI/workflows/PEP8/badge.svg?branch=master" alt="PEP8" /></a>
+    <a href="https://github.styleci.io/repos/263736411?branch=master"><img src="https://github.styleci.io/repos/263736411/shield?branch=master" alt="StyleCI"></a><br>
+    <a href="https://app.codacy.com/gh/GengKapak/DCLXVI/dashboard"> <img src="https://img.shields.io/codacy/grade/a8f0747a964e4712818a28d2a7f4edd3?style=for-the-badge" alt="Codacy" /></a>
+    <a href="https://github.com/GengKapak/DCLXVI"> <img src="https://img.shields.io/github/repo-size/GengKapak/DCLXVI?style=for-the-badge" /></a>
+    <a href="https://github.com/GengKapak/DCLXVI/graphs/contributors"> <img src="https://img.shields.io/github/contributors/GengKapak/DCLXVI?style=for-the-badge" /></a>
+    <a href="https://github.com/GengKapak/DCLXVI/commits/master"> <img src="https://img.shields.io/github/last-commit/GengKapak/DCLXVI?style=for-the-badge" /></a>
+    <a href="https://github.com/GengKapak/DCLXVI/issues"> <img src="https://img.shields.io/github/issues-closed/GengKapak/DCLXVI?style=for-the-badge" /></a>
+    <a href="https://hub.docker.com/r/dasbastard/alpine/tags"> <img src="https://img.shields.io/docker/v/dasbastard/alpine/latest?label=docker%20tag&style=for-the-badge" /></a>
+    <a href="https://hub.docker.com/r/dasbastard/alpine"> <img src="https://img.shields.io/docker/image-size/dasbastard/alpine/latest?label=docker%20image%20size&style=for-the-badge" /></a>
+    <a href="https://github.com/GengKapak/DCLXVI/network/members"> <img src="https://img.shields.io/github/forks/GengKapak/DCLXVI?style=for-the-badge" /></a>
+    <img src="https://telegra.ph/file/2a7b0bd8547a80c019493.jpg" alt="Image" width="800" height="600" />
+</p>
 
 ```
 /**
@@ -27,12 +39,12 @@ It has since evolved, becoming extremely modular and simple to use.
 ## Generate String Session
 
 Run on Repl.it:
-<p align="center"><a href="http://dclxvi.anggar96s.repl.run"> <img src="https://telegra.ph/file/545ee571b1878b0411eff.jpg" alt="Generate String Session" /></a></p>
+<p><a href="http://dclxvi.anggar96s.repl.run"> <img src="https://img.shields.io/badge/run-string__session.py-blue?style=for-the-badge&logo=repl.it" alt="Generate String Session" /></a></p>
 
 ## How do I use it?
 
 Deploy to Heroku:
-<p align="center"><a href="https://heroku.com/deploy"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku" /></a></p>
+<p><a href="https://heroku.com/deploy"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku" /></a></p>
 
 ## Useful guides
 

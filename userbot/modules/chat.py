@@ -3,14 +3,14 @@
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 """ Userbot module containing userid, chatid and log commands"""
-
 from asyncio import sleep
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, bot
+
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 from userbot.events import register
 from userbot.modules.admin import get_user_from_event
 
 
-@register(outgoing=True, pattern="^\.userid$")
+@register(outgoing=True, pattern=r"^\.userid$")
 async def useridgetter(target):
     """ For .userid command, returns the ID of the target user. """
     message = await target.get_reply_message()
@@ -27,11 +27,10 @@ async def useridgetter(target):
                 name = "@" + message.forward.sender.username
             else:
                 name = "*" + message.forward.sender.first_name + "*"
-        await target.edit("**Name:** {} \n**User ID:** `{}`".format(
-            name, user_id))
+        await target.edit("**Name:** {} \n**User ID:** `{}`".format(name, user_id))
 
 
-@register(outgoing=True, pattern="^\.link(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.link(?: |$)(.*)")
 async def permalink(mention):
     """ For .link command, generates a link to the user's PM with a custom text. """
     user, custom = await get_user_from_event(mention)
@@ -40,12 +39,12 @@ async def permalink(mention):
     if custom:
         await mention.edit(f"[{custom}](tg://user?id={user.id})")
     else:
-        tag = user.first_name.replace("\u2060",
-                                      "") if user.first_name else user.username
+        tag = (user.first_name.replace("\u2060", "")
+               if user.first_name else user.username)
         await mention.edit(f"[{tag}](tg://user?id={user.id})")
 
 
-@register(outgoing=True, pattern="^\.chatid$")
+@register(outgoing=True, pattern=r"^\.chatid$")
 async def chatidgetter(chat):
     """ For .chatid, returns the ID of the chat you are in at that moment. """
     await chat.edit("Chat ID: `" + str(chat.chat_id) + "`")
@@ -71,27 +70,27 @@ async def log(log_text):
     await log_text.delete()
 
 
-@register(outgoing=True, pattern="^\.kickme$")
+@register(outgoing=True, pattern=r"^\.kickme$")
 async def kickme(leave):
     """ Basically it's .kickme command """
     await leave.edit("Nope, no, no, I go away")
-    await leave.client.kick_participant(leave.chat_id, 'me')
+    await leave.client.kick_participant(leave.chat_id, "me")
 
 
-@register(outgoing=True, pattern="^\.unmutechat$")
+@register(outgoing=True, pattern=r"^\.unmutechat$")
 async def unmute_chat(unm_e):
     """ For .unmutechat command, unmute a muted chat. """
     try:
         from userbot.modules.sql_helper.keep_read_sql import unkread
     except AttributeError:
-        return await unm_e.edit('`Running on Non-SQL Mode!`')
+        return await unm_e.edit("`Running on Non-SQL Mode!`")
     unkread(str(unm_e.chat_id))
     await unm_e.edit("```Unmuted this chat Successfully```")
     await sleep(2)
     await unm_e.delete()
 
 
-@register(outgoing=True, pattern="^\.mutechat$")
+@register(outgoing=True, pattern=r"^\.mutechat$")
 async def mute_chat(mute_e):
     """ For .mutechat command, mute any chat. """
     try:
@@ -105,8 +104,8 @@ async def mute_chat(mute_e):
     await mute_e.delete()
     if BOTLOG:
         await mute_e.client.send_message(
-            BOTLOG_CHATID,
-            str(mute_e.chat_id) + " was silenced.")
+            BOTLOG_CHATID, str(mute_e.chat_id) + " was silenced."
+        )
 
 
 @register(incoming=True, disable_errors=True)
@@ -131,11 +130,11 @@ regexNinja = False
 async def sedNinja(event):
     """For regex-ninja module, auto delete command starting with s/"""
     if regexNinja:
-        await sleep(.5)
+        await sleep(0.5)
         await event.delete()
 
 
-@register(outgoing=True, pattern="^\.regexninja (on|off)$")
+@register(outgoing=True, pattern=r"^\.regexninja (on|off)$")
 async def sedNinjaToggle(event):
     """ Enables or disables the regex ninja module. """
     global regexNinja
@@ -151,24 +150,23 @@ async def sedNinjaToggle(event):
         await event.delete()
 
 
-CMD_HELP.update({
-    "chat":
-    ">`.chatid`"
-    "\nUsage: Fetches the current chat's ID"
-    "\n\n>`.userid`"
-    "\nUsage: Fetches the ID of the user in reply, if its a forwarded message, finds the ID for the source."
-    "\n\n>`.log`"
-    "\nUsage: Forwards the message you've replied to in your bot logs group."
-    "\n\n>`.kickme`"
-    "\nUsage: Leave from a targeted group."
-    "\n\n>`.unmutechat`"
-    "\nUsage: Unmutes a muted chat."
-    "\n\n>`.mutechat`"
-    "\nUsage: Allows you to mute any chat."
-    "\n\n>`.link <username/userid> : <optional text>` (or) reply to someone's message with"
-    "\n\n>`.link <optional text>`"
-    "\nUsage: Generate a permanent link to the user's profile with optional custom text."
-    "\n\n>`.regexninja on/off`"
-    "\nUsage: Globally enable/disables the regex ninja module."
-    "\nRegex Ninja module helps to delete the regex bot's triggering messages."
-})
+CMD_HELP.update(
+    {
+        "chat": ">`.chatid`"
+        "\nUsage: Fetches the current chat's ID"
+        "\n\n>`.userid`"
+        "\nUsage: Fetches the ID of the user in reply, if its a forwarded message, finds the ID for the source."
+        "\n\n>`.log`"
+        "\nUsage: Forwards the message you've replied to in your bot logs group."
+        "\n\n>`.kickme`"
+        "\nUsage: Leave from a targeted group."
+        "\n\n>`.unmutechat`"
+        "\nUsage: Unmutes a muted chat."
+        "\n\n>`.mutechat`"
+        "\nUsage: Allows you to mute any chat."
+        "\n\n>`.link <username/userid> : <optional text>` (or) reply to someone's message with"
+        "\n\n>`.link <optional text>`"
+        "\nUsage: Generate a permanent link to the user's profile with optional custom text."
+        "\n\n>`.regexninja on/off`"
+        "\nUsage: Globally enable/disables the regex ninja module."
+        "\nRegex Ninja module helps to delete the regex bot's triggering messages."})
