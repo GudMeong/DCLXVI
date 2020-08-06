@@ -71,10 +71,6 @@
       "description": "PM Auto-Ban Feature Switch. Also known as the 'bleep blop, this is a bot...' module.",
       "value": "False"
     },
-    "YOUTUBE_API_KEY": {
-      "description": "YouTube Data API Key for .yt command. Get from https://console.cloud.google.com",
-      "required": false
-    },
     "OCR_SPACE_API_KEY": {
       "description": "OCR API Key for .ocr command. Get from https://ocr.space/ocrapi",
       "required": false
@@ -136,9 +132,9 @@
       "description": "Set the default city for the userbot's weather module.",
       "required": false
     },
-    "QUOTES_API_TOKEN": {
-      "description": "API for quotes module get it from http://antiddos.systems",
-      "value": "",
+    "WEATHER_DEFLANG": {
+      "description": "Set the default language for the userbot's weather module.",
+      "value": "en",
       "required": false
     },
     "TERM_ALIAS": {
@@ -175,10 +171,6 @@
       "description": "Set this to True in case you want the error logs to be stored in the userbot log group, instead of spitting out the file in the current chat, requires a valid BOTLOG_CHATID to be set.",
       "value": "True"
     },
-    "LYDIA_API_KEY": {
-      "description": "This Module Needs CoffeeHouse API to work. so Join https://telegram.dog/IntellivoidDev and send #activateapi and follow instructions.",
-      "required": false
-    },
     "WATCH_COUNTRY": {
       "description": "Country code for justwatch.com",
       "value": "ID",
@@ -188,6 +180,29 @@
       "description": "Input your DEEZER ARL TOKEN",
       "value": "",
       "required": false
+    },
+    "TZ": {
+      "description": "Your timezone",
+      "value": "Asia/Jakarta",
+      "required": false
+    },
+    "G_PHOTOS_CLIENT_ID": {
+      "description": "get the client id from https://j.mp/39lWQQm",
+      "required": false
+    },
+    "G_PHOTOS_CLIENT_SECRET": {
+      "description": "get the client secret from https://j.mp/39lWQQm",
+      "required": false
+    },
+    "WOLFRAM_ID": {
+      "description": "Get an API KEY from products.wolframalpha.com/api/",
+      "required": false
+    }
+  },
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "free"
     }
   },
   "addons": [

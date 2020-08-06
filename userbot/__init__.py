@@ -7,6 +7,7 @@
 
 import os
 import re
+import time
 from distutils.util import strtobool as sb
 from logging import DEBUG, INFO, basicConfig, getLogger
 from math import ceil
@@ -21,6 +22,8 @@ from telethon.sync import TelegramClient, custom, events
 from telethon.tl.functions.channels import JoinChannelRequest
 
 load_dotenv("config.env")
+
+StartTime = time.time()
 
 
 def paginate_help(page_number, loaded_modules, prefix):
@@ -135,21 +138,16 @@ ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
 CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/usr/bin/chromedriver")
 GOOGLE_CHROME_BIN = os.environ.get(
     "GOOGLE_CHROME_BIN",
-    "/usr/bin/chromium-browser")
+    "/usr/bin/chromium")
 
-# OpenWeatherMap API Key
+# Weather stuff
 OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
 WEATHER_DEFCITY = os.environ.get("WEATHER_DEFCITY", None)
-
-# Lydia API
-LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
+WEATHER_DEFLANG = os.environ.get("WEATHER_DEFLANG", None)
 
 # Anti Spambot
 ANTI_SPAMBOT = sb(os.environ.get("ANTI_SPAMBOT", "False"))
 ANTI_SPAMBOT_SHOUT = sb(os.environ.get("ANTI_SPAMBOT_SHOUT", "False"))
-
-# Youtube API key
-YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
 
 # Time & Date - Country and Time Zone
 COUNTRY = str(os.environ.get("COUNTRY", ""))
@@ -187,20 +185,30 @@ G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
 G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
 G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
 G_DRIVE_FOLDER_ID = os.environ.get("G_DRIVE_FOLDER_ID", None)
+
+# Google Photos
+G_PHOTOS_CLIENT_ID = os.environ.get("G_PHOTOS_CLIENT_ID", None)
+G_PHOTOS_CLIENT_SECRET = os.environ.get("G_PHOTOS_CLIENT_SECRET", None)
+G_PHOTOS_AUTH_TOKEN_ID = os.environ.get("G_PHOTOS_AUTH_TOKEN_ID", None)
+if G_PHOTOS_AUTH_TOKEN_ID:
+    G_PHOTOS_AUTH_TOKEN_ID = int(G_PHOTOS_AUTH_TOKEN_ID)
+
+# Download directory location
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get(
     "TMP_DOWNLOAD_DIRECTORY", "./downloads")
 
 # Terminal Alias
 TERM_ALIAS = os.environ.get("TERM_ALIAS", None)
 
+# Wolfram ID
+# Get an API KEY from products.wolframalpha.com/api/
+WOLFRAM_ID = os.environ.get("WOLFRAM_ID", None)
+
 # Zipfile module
 ZIP_DOWNLOAD_DIRECTORY = os.environ.get("ZIP_DOWNLOAD_DIRECTORY", "./zips")
 
 # Genius Lyrics API
 GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN", None)
-
-# Quote
-QUOTES_API_TOKEN = os.environ.get("QUOTES_API_TOKEN", None)
 
 # Inline bot
 BOT_TOKEN = os.environ.get("BOT_TOKEN", None)
@@ -224,6 +232,10 @@ IMG = os.environ.get(
     "IMG",
     "https://telegra.ph/file/2a7b0bd8547a80c019493.jpg")
 
+# Set default timezone
+TZ = os.environ.get("TZ", "Asia/Jakarta")
+time.tzset()
+
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
 # and giving them correct perms to work properly.
 if not os.path.exists("bin"):
@@ -246,28 +258,6 @@ if STRING_SESSION:
 else:
     # pylint: disable=invalid-name
     bot = TelegramClient("userbot", API_KEY, API_HASH)
-
-
-if os.path.exists("learning-data-root.check"):
-    os.remove("learning-data-root.check")
-else:
-    LOGS.info("No Braincheck file, fetching ...")
-
-URL = "https://angga.studio/learning-data-root.check"
-
-with open("learning-data-root.check", "wb") as load:
-    load.write(get(URL).content)
-
-
-if os.path.exists("blacklist.check"):
-    os.remove("blacklist.check")
-else:
-    LOGS.info("No Blacklist check file, fetching ...")
-
-URL = "https://angga.studio/blacklist.check"
-
-with open("blacklist.check", "wb") as load:
-    load.write(get(URL).content)
 
 
 async def check_botlog_chatid():

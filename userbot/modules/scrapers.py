@@ -1,24 +1,23 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module containing various scrapers. """
 import asyncio
+import json
 import os
 import re
 import shutil
 import time
 from asyncio import sleep
-from html import unescape
 from re import findall
 from urllib.error import HTTPError
 from urllib.parse import quote_plus
 
+import wikipedia
 from bs4 import BeautifulSoup
 from emoji import get_emoji_regexp
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS
 from gtts.lang import tts_langs
@@ -46,14 +45,16 @@ from userbot import (
     CMD_HELP,
     IMG_LIMIT,
     TEMP_DOWNLOAD_DIRECTORY,
-    YOUTUBE_API_KEY,
+    WOLFRAM_ID,
 )
 from userbot.events import register
 from userbot.utils import chrome, googleimagesdownload, progress
+from youtube_search import YoutubeSearch
 
 CARBONLANG = "auto"
 TTS_LANG = "id"
 TRT_LANG = "id"
+WIKI_LANG = "id"
 
 
 @register(outgoing=True, pattern=r"^\.crblang (.*)")
@@ -197,6 +198,14 @@ async def gsearch(q_event):
             BOTLOG_CHATID,
             "Google Search query `" + match + "` was executed successfully",
         )
+
+
+@register(outgoing=True, pattern=r"^\.wklang (.*)")
+async def setlang(wklang):
+    global WIKI_LANG
+    WIKI_LANG = wklang.pattern_match.group(1)
+    wikipedia.set_lang(f"{WIKI_LANG}")
+    await wklang.edit(f"Language for wikipedia set to {WIKI_LANG}")
 
 
 @register(outgoing=True, pattern=r"^\.wiki (.*)")
@@ -484,68 +493,49 @@ async def lang(value):
         )
 
 
-@register(outgoing=True, pattern=r"^\.yt (.*)")
-async def yt_search(video_q):
+@register(outgoing=True, pattern=r"^\.yt (\d*) *(.*)")
+async def yt_search(event):
     """ For .yt command, do a YouTube search from Telegram. """
-    query = video_q.pattern_match.group(1)
-    result = ""
 
-    if not YOUTUBE_API_KEY:
-        return await video_q.edit(
-            "`Error: YouTube API key missing! Add it to environment vars or config.env.`"
-        )
+    if event.pattern_match.group(1) != "":
+        counter = int(event.pattern_match.group(1))
+        if counter > 10:
+            counter = int(10)
+        if counter <= 0:
+            counter = int(1)
+    else:
+        counter = int(3)
 
-    await video_q.edit("```Processing...```")
+    query = event.pattern_match.group(2)
 
-    full_response = await youtube_search(query)
-    videos_json = full_response[1]
+    if not query:
+        return await event.edit("`Enter a query to search.`")
+    await event.edit("`Processing...`")
 
-    for video in videos_json:
-        title = f"{unescape(video['snippet']['title'])}"
-        link = f"https://youtu.be/{video['id']['videoId']}"
-        result += f"{title}\n{link}\n\n"
-
-    reply_text = f"**Search Query:**\n`{query}`\n\n**Results:**\n\n{result}"
-
-    await video_q.edit(reply_text)
-
-
-async def youtube_search(
-    query, order="relevance", token=None, location=None, location_radius=None
-):
-    """ Do a YouTube search. """
-    youtube = build(
-        "youtube", "v3", developerKey=YOUTUBE_API_KEY, cache_discovery=False
-    )
-    search_response = (
-        youtube.search()
-        .list(
-            q=query,
-            type="video",
-            pageToken=token,
-            order=order,
-            part="id,snippet",
-            maxResults=10,
-            location=location,
-            locationRadius=location_radius,
-        )
-        .execute()
-    )
-
-    videos = []
-
-    for search_result in search_response.get("items", []):
-        if search_result["id"]["kind"] == "youtube#video":
-            videos.append(search_result)
     try:
-        nexttok = search_response["nextPageToken"]
-        return (nexttok, videos)
-    except HttpError:
-        nexttok = "last_page"
-        return (nexttok, videos)
+        results = json.loads(
+            YoutubeSearch(
+                query,
+                max_results=counter).to_json())
     except KeyError:
-        nexttok = "KeyError, try again."
-        return (nexttok, videos)
+        return await event.edit(
+            "`Youtube Search gone retard.\nCan't search this query!`"
+        )
+
+    output = f"**Search Query:**\n`{query}`\n\n**Results:**\n"
+
+    for i in results["videos"]:
+        try:
+            title = i["title"]
+            link = "https://youtube.com" + i["url_suffix"]
+            channel = i["channel"]
+            duration = i["duration"]
+            views = i["views"]
+            output += f"[{title}]({link})\nChannel: `{channel}`\nDuration: {duration} | {views}\n\n"
+        except IndexError:
+            break
+
+    await event.edit(output, link_preview=False)
 
 
 @register(outgoing=True, pattern=r"^\.r(a|v) (.*)")
@@ -657,6 +647,27 @@ async def download_video(v_url):
         await v_url.delete()
 
 
+@register(outgoing=True, pattern=r"^\.wolfram (.*)")
+async def wolfram(wvent):
+    if WOLFRAM_ID is None:
+        await wvent.edit(
+            "Please set your WOLFRAM_ID first !\n"
+            "Get your API KEY from [here](https://"
+            "products.wolframalpha.com/api/)",
+            parse_mode="Markdown",
+        )
+        return
+    i = wvent.pattern_match.group(1)
+    appid = WOLFRAM_ID
+    server = f"https://api.wolframalpha.com/v1/spoken?appid={appid}&i={i}"
+    res = get(server)
+    await wvent.edit(f"**{i}**\n\n" + res.text, parse_mode="Markdown")
+    if BOTLOG:
+        await wvent.client.send_message(
+            BOTLOG_CHATID, f".wolfram {i} was executed successfully"
+        )
+
+
 def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
     return get_emoji_regexp().sub("", inputString)
@@ -674,20 +685,25 @@ CMD_HELP.update(
         "google": ">`.google <query>`"
         "\nUsage: Does a search on Google.",
         "wiki": ">`.wiki <query>`"
-        "\nUsage: Does a search on Wikipedia.",
+        "\nUsage: Does a search on Wikipedia.\n"
+        ">`.wklang` <language code> (Default is Indonesian)"
+        "\nUsage: Set language for wikipedia.",
         "ud": ">`.ud <query>`"
         "\nUsage: Does a search on Urban Dictionary.",
         "tts": ">`.tts <text> [or reply]`"
         "\nUsage: Translates text to speech for the language which is set."
-        "\nUse >`.lang tts <language code>` to set language for tts. (Default is English.)",
+        "\nUse >`.lang tts <language code>` to set language for tts. (Default is Indonesian.)",
         "trt": ">`.trt <text> [or reply]`"
         "\nUsage: Translates text to the language which is set."
-        "\nUse >`.lang trt <language code>` to set language for trt. (Default is English)",
-        "yt": ">`.yt <text>`"
-        "\nUsage: Does a YouTube search.",
+        "\nUse >`.lang trt <language code>` to set language for trt. (Default is Indonesian)",
+        "yt": ">`.yt <count> <query>`"
+        "\nUsage: Does a YouTube search."
+        "\nCan specify the number of results needed (default is 3).",
         "imdb": ">`.imdb <movie-name>`"
         "\nUsage: Shows movie info and other stuff.",
         "rip": ">`.ra <url> or .rv <url>`"
         "\nUsage: Download videos and songs from YouTube "
         "(and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).",
+        "wolfram": ">`.wolfram` <query>"
+        "\nUsage: Get answers to questions using WolframAlpha Spoken Results API",
     })

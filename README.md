@@ -3,14 +3,15 @@
 <p align="center">
     <a href="https://github.com/GengKapak/DCLXVI/actions?query=PEP8"> <img src="https://github.com/GengKapak/DCLXVI/workflows/PEP8/badge.svg?branch=master" alt="PEP8" /></a>
     <a href="https://github.styleci.io/repos/263736411?branch=master"><img src="https://github.styleci.io/repos/263736411/shield?branch=master" alt="StyleCI"></a><br>
-    <a href="https://app.codacy.com/gh/GengKapak/DCLXVI/dashboard"> <img src="https://img.shields.io/codacy/grade/a8f0747a964e4712818a28d2a7f4edd3?style=for-the-badge" alt="Codacy" /></a>
-    <a href="https://github.com/GengKapak/DCLXVI"> <img src="https://img.shields.io/github/repo-size/GengKapak/DCLXVI?style=for-the-badge" /></a>
-    <a href="https://github.com/GengKapak/DCLXVI/graphs/contributors"> <img src="https://img.shields.io/github/contributors/GengKapak/DCLXVI?style=for-the-badge" /></a>
-    <a href="https://github.com/GengKapak/DCLXVI/commits/master"> <img src="https://img.shields.io/github/last-commit/GengKapak/DCLXVI?style=for-the-badge" /></a>
-    <a href="https://github.com/GengKapak/DCLXVI/issues"> <img src="https://img.shields.io/github/issues-closed/GengKapak/DCLXVI?style=for-the-badge" /></a>
-    <a href="https://hub.docker.com/r/dasbastard/alpine/tags"> <img src="https://img.shields.io/docker/v/dasbastard/alpine/latest?label=docker%20tag&style=for-the-badge" /></a>
-    <a href="https://hub.docker.com/r/dasbastard/alpine"> <img src="https://img.shields.io/docker/image-size/dasbastard/alpine/latest?label=docker%20image%20size&style=for-the-badge" /></a>
-    <a href="https://github.com/GengKapak/DCLXVI/network/members"> <img src="https://img.shields.io/github/forks/GengKapak/DCLXVI?style=for-the-badge" /></a>
+    <a href="https://app.codacy.com/gh/GengKapak/DCLXVI/dashboard"> <img src="https://img.shields.io/codacy/grade/a8f0747a964e4712818a28d2a7f4edd3?color=blue&logo=codacy&style=for-the-badge" alt="Codacy" /></a>
+    <a href="https://github.com/GengKapak/DCLXVI"> <img src="https://img.shields.io/github/repo-size/GengKapak/DCLXVI?logo=github&style=for-the-badge" /></a>
+    <a href="https://github.com/GengKapak/DCLXVI/graphs/contributors"> <img src="https://img.shields.io/github/contributors-anon/GengKapak/DCLXVI?color=blue&label=all%20contributors&logo=github&style=for-the-badge" /></a>
+    <a href="https://github.com/GengKapak/DCLXVI/commits/master"> <img src="https://img.shields.io/github/last-commit/GengKapak/DCLXVI?color=blue&logo=github&style=for-the-badge" /></a>
+    <a href="https://github.com/GengKapak/DCLXVI/issues"> <img src="https://img.shields.io/github/issues/GengKapak/DCLXVI?color=blue&logo=github&style=for-the-badge" /></a>
+    <a href="https://github.com/GengKapak/DCLXVI/network/members"> <img src="https://img.shields.io/github/forks/GengKapak/DCLXVI?logo=github&style=for-the-badge" /></a>
+    <a href="https://hub.docker.com/r/gengkapak/archlinux"> <img src="https://img.shields.io/docker/image-size/gengkapak/archlinux/latest?label=docker%20image%20size&logo=docker&style=for-the-badge" /></a>
+    <a href="https://hub.docker.com/r/gengkapak/archlinux/tags"> <img src="https://img.shields.io/docker/v/gengkapak/archlinux/latest?label=docker%20version&logo=docker&style=for-the-badge" /></a>
+    <a href="https://pypi.org/project/Telethon/"> <img src="https://img.shields.io/pypi/v/telethon?label=telethon&logo=pypi&logoColor=white&style=for-the-badge" /></a>
     <img src="https://telegra.ph/file/2a7b0bd8547a80c019493.jpg" alt="Image" width="800" height="600" />
 </p>
 
